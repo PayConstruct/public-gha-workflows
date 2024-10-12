@@ -1,0 +1,69 @@
+name: Slack Notify Failure
+
+inputs:
+  channel-id:
+    required: true
+    type: string
+  slack-bot-token:
+    required: true
+    type: string
+
+runs:
+  slack_notify_failure:
+    using: "composite"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify channel Failure
+        id: slack_notify_failure
+        uses: slackapi/slack-github-action@v1.27.0
+        env:
+          SLACK_BOT_TOKEN: ${{ inputs.slack-bot-token }}
+        with:
+          channel-id: ${{ inputs.channel-id }}
+          update-ts: ${{ steps.slack_notify_start.outputs.ts }}
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#FF0000",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": ":x:   *<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|Github Actions Notification | ${{ github.repository }}  >*"
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "Github Actions pipeline execution *FAILED* :dizzy_face: "
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*User:* ${{ github.actor }} "
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Branch:* ${{ github.ref_name }} "
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Commit:* ${{ github.sha }} "
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+            

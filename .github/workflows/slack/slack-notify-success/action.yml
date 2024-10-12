@@ -1,0 +1,85 @@
+name: Slack Notify Success
+
+
+inputs:
+  channel-id:
+    required: true
+    type: string
+  slack-bot-token:
+    required: true
+    type: string
+
+runs:
+  slack_notify_success:
+    using: "composite"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify channel Success
+        id: slack_notify_success
+        uses: slackapi/slack-github-action@v1.27.0
+        env:
+          SLACK_BOT_TOKEN: ${{ inputs.slack-bot-token }}
+        with:
+          channel-id: ${{ inputs.channel-id }}
+          update-ts: ${{ steps.slack_notify_start.outputs.ts }}
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#4CBB17",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": ":white_check_mark:  *<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|Github Actions Notification | ${{ github.repository }}  >*"
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "Github Actions pipeline execution *SUCCEDED* :heavy_check_mark: "
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*User:* ${{ github.actor }} "
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Branch:* ${{ github.ref_name }} "
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Commit:* ${{ github.sha }} "
+                      }
+                    },
+                    {
+                      "type": "actions",
+                      "elements": [
+                        {
+                          "type": "button",
+                          "text": {
+                            "type": "plain_text",
+                            "text": "Create PR",
+                            "emoji": true
+                          },
+                          "value": "click_me_123",
+                          "action_id": "pipeline",
+                          "url": "https://github.com/${{ github.repository }}/pull/${{ github.event.number }}?expand=1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }

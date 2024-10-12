@@ -1,0 +1,69 @@
+name: Slack Notify start
+
+inputs:
+  channel-id:
+    required: true
+    type: string
+  slack-bot-token:
+    required: true
+    type: string
+
+
+runs:
+  using: "composite"
+  slack_start:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify channel Start
+        id: slack_notify_start
+        uses: slackapi/slack-github-action@v1.27.0
+        env:
+          SLACK_BOT_TOKEN: ${{ inputs.slack-bot-token }}
+        with:
+          channel-id: ${{ inputs.channel-id }}
+          update-ts: ${{ steps.slack_notify_start.outputs.ts }}
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#FAD02C",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": ":mega:  *<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|Github Actions Notification | ${{ github.repository }}  >*"
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "Github Actions pipeline execution *STARTED* :gear:"
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*User:* ${{ github.actor }} "
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Branch:* ${{ github.ref_name }} "
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Commit:* ${{ github.sha }} "
+                      }
+                    }
+                  ]
+                }
+              ]
+            }

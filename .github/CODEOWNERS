@@ -1,0 +1,4 @@
+# This is a comment
+# The '*' pattern means this rule applies to all files in the repository
+
+* @PayConstruct/devops-team
