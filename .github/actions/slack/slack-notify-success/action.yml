@@ -1,11 +1,11 @@
 name: Slack Notify Success
 
+secrets:
+  SLACK_BOT_TOKEN:
+    required: true
 
 inputs:
   channel-id:
-    required: true
-    type: string
-  slack-bot-token:
     required: true
     type: string
 
@@ -18,7 +18,7 @@ runs:
         id: slack_notify_success
         uses: slackapi/slack-github-action@v1.27.0
         env:
-          SLACK_BOT_TOKEN: ${{ inputs.slack-bot-token }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
           channel-id: ${{ inputs.channel-id }}
           update-ts: ${{ steps.slack_notify_start.outputs.ts }}

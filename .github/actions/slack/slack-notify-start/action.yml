@@ -1,6 +1,6 @@
 name: Slack Notify start
-secrets:
 
+secrets:
   SLACK_BOT_TOKEN:
     required: true
 inputs:
