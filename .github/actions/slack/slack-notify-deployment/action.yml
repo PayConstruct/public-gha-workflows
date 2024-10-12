@@ -10,10 +10,8 @@ inputs:
     type: string
 
 runs:
-  slack_notify_deployment:
-    using: "composite"
-    runs-on: ubuntu-latest
-    steps:
+  using: "composite"
+  steps:
       - name: Notify channel Deployment
         id: slack_notify_deployment
         uses: slackapi/slack-github-action@v1.27.0

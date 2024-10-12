@@ -10,10 +10,8 @@ inputs:
     type: string
 
 runs:
-  slack_notify_success:
-    using: "composite"
-    runs-on: ubuntu-latest
-    steps:
+  using: "composite"
+  steps:
       - name: Notify channel Success
         id: slack_notify_success
         uses: slackapi/slack-github-action@v1.27.0

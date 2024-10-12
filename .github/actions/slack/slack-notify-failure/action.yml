@@ -9,10 +9,8 @@ inputs:
     type: string
 
 runs:
-  slack_notify_failure:
-    using: "composite"
-    runs-on: ubuntu-latest
-    steps:
+  using: "composite"
+  steps:
       - name: Notify channel Failure
         id: slack_notify_failure
         uses: slackapi/slack-github-action@v1.27.0
