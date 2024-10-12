@@ -7,7 +7,8 @@ inputs:
   channel-id:
     required: true
     type: string
-
+  slack-bot-token:
+    required: true
 
 runs:
   using: "composite"
@@ -16,7 +17,7 @@ runs:
       id: slack_notify_start
       uses: slackapi/slack-github-action@v1.27.0
       env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        SLACK_BOT_TOKEN: ${{ inputs.slack-bot-token }}
       with:
         channel-id: ${{ inputs.channel-id }}
         update-ts: ${{ steps.slack_notify_start.outputs.ts }}
